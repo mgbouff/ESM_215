@@ -1,0 +1,68 @@
+---
+title: 'Exercise 2: Physical environmental controls on landcover pattern'
+author: "Marie Bouffard"
+date: "1/20/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(entropy)
+library(dplyr)
+library(here)
+
+```
+
+### Mutual Information Analysis Santa Ynez
+```{r}
+
+# Read in sample data and remove missing data
+sydat <- read.csv(here("Exercise_2_Physical_Controls", "ex2_sample_data2.csv"), 
+                  header = TRUE,
+                  na.strings = c(-9999)) %>% 
+  na.omit()
+
+```
+<br>
+
+#### First level MIA
+
+```{r}
+
+# Calculate joint entropy of landcover with geology, flow accumulation and #winter insolation
+
+migeol <- table(sydat$landcover,sydat$geology) %>% mi.empirical()
+
+miflow <- table(sydat$landcover,sydat$flowaccum) %>% mi.empirical()
+
+mirad <- table(sydat$landcover,sydat$winter_rad) %>% mi.empirical()
+
+```
+
+Highest association is between landcover and geology (MI=0.2286).
+
+<br>
+
+#### Second level MIA
+```{r}
+
+# Next, stratify the sample by geology loop through geology classes 1 to 5, and calculate MI for flowaccum and winter_rad
+
+mi_flow2 <- NULL
+    		for(i in c(1:5)){
+       			y <- filter(sydat,geology == i)
+        			x <- table(y$landcover,y$flowaccum) %>% mi.empirical()
+      		mi_flow2 <- c(mi_flow2,x)
+    		}
+
+mi_rad2 <- NULL
+    		for(i in c(1:5)){
+        			y <- filter(sydat,geology == i)
+        			x <- table(y$landcover,y$winter_rad) %>% mi.empirical()
+    		mi_rad2 <- c(mi_rad2,x)
+    		}
+
+
+```
+
