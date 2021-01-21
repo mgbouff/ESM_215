@@ -11,6 +11,7 @@ knitr::opts_chunk$set(echo = TRUE)
 library(entropy)
 library(dplyr)
 library(here)
+library(ggraph)
 
 ```
 
@@ -38,6 +39,73 @@ miflow <- table(sydat$landcover,sydat$flowaccum) %>% mi.empirical()
 
 mirad <- table(sydat$landcover,sydat$winter_rad) %>% mi.empirical()
 
+#---------------------------------------
+# Tier 1
+#---------------------------------------
+
+tier1 <- table(sydat$landcover, sydat$geology) %>% 
+  as.data.frame.matrix()
+
+sum(tier1[,"1"])
+sum(tier1[,"2"])
+sum(tier1[,"3"])
+sum(tier1[,"4"])
+sum(tier1[,"5"])
+
+#---------------------------------------
+# Tier 2
+#---------------------------------------
+
+# Class 1
+tier2_geo1 <- sydat %>% 
+  filter(geology == "1")
+
+geo1 <- table(tier2_geo1$landcover,tier2_geo1$winter_rad)
+  
+sum(geo1[,"1"])
+sum(geo1[,"2"])
+sum(geo1[,"3"])
+
+# Class 2
+tier2_geo2 <- sydat %>% 
+  filter(geology == "2")
+
+geo2 <- table(tier2_geo2$landcover,tier2_geo2$winter_rad)
+  
+sum(geo2[,"1"])
+sum(geo2[,"2"])
+sum(geo2[,"3"])
+
+# Class 3
+tier2_geo3 <- sydat %>% 
+  filter(geology == "3")
+
+geo3 <- table(tier2_geo3$landcover,tier2_geo3$winter_rad)
+  
+sum(geo3[,"1"])
+sum(geo3[,"2"])
+sum(geo3[,"3"])
+
+# Class 4
+tier2_geo4 <- sydat %>% 
+  filter(geology == "4")
+
+geo4 <- table(tier2_geo4$landcover,tier2_geo4$winter_rad)
+  
+sum(geo4[,"1"])
+sum(geo4[,"2"])
+sum(geo4[,"3"])
+
+# Class 5
+tier2_geo5 <- sydat %>% 
+  filter(geology == "5")
+
+geo5 <- table(tier2_geo5$landcover,tier2_geo5$winter_rad)
+  
+sum(geo5[,"1"])
+sum(geo5[,"2"])
+sum(geo5[,"3"])
+
 ```
 
 Highest association is between landcover and geology (MI=0.2286).
@@ -52,7 +120,7 @@ Highest association is between landcover and geology (MI=0.2286).
 mi_flow2 <- NULL
     		for(i in c(1:5)){
        			y <- filter(sydat,geology == i)
-        			x <- table(y$landcover,y$flowaccum) %>% mi.empirical()
+        		x <- table(y$landcover,y$flowaccum) %>% mi.empirical()
       		mi_flow2 <- c(mi_flow2,x)
     		}
 
@@ -62,6 +130,15 @@ mi_rad2 <- NULL
         			x <- table(y$landcover,y$winter_rad) %>% mi.empirical()
     		mi_rad2 <- c(mi_rad2,x)
     		}
+
+mi_rad2
+
+```
+
+How strong is the relationship between land cover and physical environmental variables?
+
+```{r}
+
 
 
 ```
