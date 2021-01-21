@@ -139,7 +139,63 @@ How strong is the relationship between land cover and physical environmental var
 
 ```{r}
 
+#---------------------------------------
+# entropy
+#---------------------------------------
 
+entropy.empirical(sydat$landcover)
+
+#Geology
+g1 <- entropy.empirical(sydat[sydat[,6]==1,5])
+g2 <- entropy.empirical(sydat[sydat[,6]==2,5])
+g3 <- entropy.empirical(sydat[sydat[,6]==3,5])
+g4 <- entropy.empirical(sydat[sydat[,6]==4,5])
+g5 <- entropy.empirical(sydat[sydat[,6]==5,5])
+
+# Geo portion
+
+g_prop <- table(sydat$geology)/length(sydat$landcover)
+
+g_weight <- sum(g1*g_prop[1], g2*g_prop[2], g3*g_prop[3], g4*g_prop[4], g5*g_prop[5])
+
+table(sydat$landcover, sydat$geology)
+
+# Flow
+f1 <- entropy.empirical(sydat[sydat[,7]==1,5])
+f2 <- entropy.empirical(sydat[sydat[,7]==2,5])
+f3 <- entropy.empirical(sydat[sydat[,7]==3,5])
+
+# Flow portion
+
+f_prop <- table(sydat$flowaccum)/length(sydat$landcover)
+
+f_weight <- sum(f1*f_prop[1], f2*f_prop[2], f3*f_prop[3])
+
+table(sydat$landcover, sydat$flowaccum)
+
+# Winter rad
+r1 <- entropy.empirical(sydat[sydat[,8]==1,5])
+r2 <- entropy.empirical(sydat[sydat[,8]==2,5])
+r3 <- entropy.empirical(sydat[sydat[,8]==3,5])
+
+# rad portion
+
+r_prop <- table(sydat$winter_rad)/length(sydat$landcover)
+
+r_weight <- sum(r1*r_prop[1], r2*r_prop[2], r3*r_prop[3])
+
+table(sydat$landcover, sydat$winter_rad)
+
+#---------------------------------------
+# redundancy
+#---------------------------------------
+
+# calculate redundancy (R) = 1 - (weighted entropy of your second variable)/(total entropy from your first variable)
+
+g_red <- 1 - (g_weight)/entropy.empirical(sydat$landcover)
+
+f_red <- 1 - (f_weight)/entropy.empirical(sydat$landcover)
+
+r_red <- 1 - (r_weight)/entropy.empirical(sydat$landcover)
 
 ```
-
